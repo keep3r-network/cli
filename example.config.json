@@ -1,0 +1,17 @@
+{
+  "txRpc": "https://eth-mainnet.alchemyapi.io/v2/<ALCHEMY_API_KEY>",
+  "jobs": [
+    {
+      "path": "node_modules/@keep3r-network/cli-sample-jobs/dist/mainnet/dca"
+    },
+    {
+      "path": "node_modules/@keep3r-network/cli-sample-jobs/dist/mainnet/harvest-v2"
+    },
+    {
+      "path": "node_modules/@keep3r-network/cli-sample-jobs/dist/mainnet/tend-v2"
+    },
+    {
+      "path": "node_modules/@keep3r-network/cli-sample-jobs/dist/mainnet/tend-v2-2"
+    }
+  ]
+}

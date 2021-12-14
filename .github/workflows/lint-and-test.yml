@@ -1,0 +1,25 @@
+name: Lint and test
+
+on: [push, pull_request]
+
+jobs:
+  build_and_test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+
+    steps:
+      - uses: actions/checkout@v2
+
+      # https://github.com/actions/setup-node
+      - uses: actions/setup-node@v2-beta
+        with:
+          node-version: '16'
+          cache: 'yarn'
+
+      - run: yarn install
+      - run: yarn test
+        env: 
+          ALCHEMYKEY: ${{ secrets.ALCHEMYKEY }}
+      - run: yarn lint
+      - run: yarn build

@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "declaration": true,
+    "strict": true,
+    "importHelpers": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "experimentalDecorators": true,
+    "resolveJsonModule": true,
+    "sourceMap": true,
+    "outDir": "./dist/tsc/",
+    "types": ["node", "jest"],
+    "lib": ["ES6", "DOM"],
+    "baseUrl": ".",
+    "paths": {}
+  },
+  "include": ["src/**/*.ts", "__tests__/**/*.spec.ts"],
+  "exclude": ["node_modules"]
+}

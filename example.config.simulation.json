@@ -1,0 +1,4 @@
+{ 
+    "localRpc": "https://eth-goerli.alchemyapi.io/v2/API_KEY",
+    "keeper": "YOUR_KEEPER_ADDRESS"
+}
