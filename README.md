@@ -6,12 +6,14 @@ Jobs can be added as external packages. This allows job owners to publish their 
 
 ## Getting Started
 
-1. Clone this repo
+1. [Install geth](https://geth.ethereum.org/docs/install-and-build/installing-geth)
+2. Clone this repo
 `git clone https://github.com/keep3r-network/cli`
 2. Install dependencies (`yarn install`)
 3. Create a `.json` file with your config. Use the example `.config.example.json` we provide to see the fields you have to complete.
 4. Create a `.json` file with your secrets. Use the example `.secrets.example.json` we provide to see how to complete it
-5. Run the following command. Both the `--config` and `--secrets` flag are required. You will have to provide the path to where your config and secrets file are located.
+5. Run a local geth node, and wait till it fully synchronizes with `yarn node:mainnet`. In case you want to run the node somewhere else or in a specific port, remember changing the `localRpc` configuration.
+6. Run the following command. Both the `--config` and `--secrets` flag are required. You will have to provide the path to where your config and secrets file are located.
 `yarn start --config <path_to_config_file> --secrets <path_to_secrets_file>`
 
 ## First run
