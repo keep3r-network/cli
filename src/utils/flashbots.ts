@@ -90,25 +90,29 @@ export class Flashbots {
 		targetBlock: number,
 		logId: string
 	): Promise<boolean> {
-		const logConsole = prelog({ targetBlock, logId });
+		const logConsole = prelog({ targetBlock, logId, provider: provider.connection.url });
 		logConsole.log(`Sending bundle`);
 
-		const response = await provider.sendBundle(bundle, targetBlock);
+		try {
+			const response = await provider.sendBundle(bundle, targetBlock);
 
-		if ('error' in response) {
-			logConsole.log(`Bundle execution error`, response.error);
-			return false;
-		}
+			if ('error' in response) {
+				logConsole.log(`Bundle execution error`, response.error);
+				return false;
+			}
 
-		const resolution = await response.wait();
+			const resolution = await response.wait();
 
-		if (resolution == FlashbotsBundleResolution.BundleIncluded) {
-			logConsole.info(`Bundle status: BundleIncluded`);
-			return true;
-		} else if (resolution == FlashbotsBundleResolution.BlockPassedWithoutInclusion) {
-			logConsole.info(`Bundle status: BlockPassedWithoutInclusion`);
-		} else if (resolution == FlashbotsBundleResolution.AccountNonceTooHigh) {
-			logConsole.warn(`AccountNonceTooHigh`);
+			if (resolution == FlashbotsBundleResolution.BundleIncluded) {
+				logConsole.info(`Bundle status: BundleIncluded`);
+				return true;
+			} else if (resolution == FlashbotsBundleResolution.BlockPassedWithoutInclusion) {
+				logConsole.info(`Bundle status: BlockPassedWithoutInclusion`);
+			} else if (resolution == FlashbotsBundleResolution.AccountNonceTooHigh) {
+				logConsole.warn(`AccountNonceTooHigh`);
+			}
+		} catch (err: unknown) {
+			logConsole.warn(`Failed to send bundle`, { error: err });
 		}
 
 		return false;

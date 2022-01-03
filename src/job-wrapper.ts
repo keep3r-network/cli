@@ -63,7 +63,8 @@ let logMetadata: { job: string };
 		.subscribe({
 			next: () => console.info('Sent workable txs to core'),
 			complete: async () => {
-				process.exit();
+				// give some time to logs to be exported (printed to files or something else)
+				setTimeout(() => process.exit(), 30);
 			},
 		});
 

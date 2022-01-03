@@ -1,6 +1,6 @@
 {
   "name": "@keep3r-network/cli",
-  "version": "1.0.0-beta.1",
+  "version": "1.0.0",
   "description": "Keep3r CLI",
   "keywords": [
     "keep3r",

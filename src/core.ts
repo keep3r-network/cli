@@ -70,12 +70,10 @@ import { hideBin } from 'yargs/helpers';
 					} else {
 						const retry$ = retryWorkAndSendTx(
 							job,
-							job.config.bundleBurst,
 							job.config.timeToAdvance,
 							job.config.priorityFee,
 							job.config.bundleBurst,
-							workRequest.correlationId,
-							Object.keys(idsInProgress),
+							workRequest,
 							processManager,
 							keeper,
 							flashbots,

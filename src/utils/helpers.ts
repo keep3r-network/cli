@@ -65,41 +65,60 @@ export function doWork(
 
 export function retryWorkAndSendTx(
 	job: JobObject,
-	aheadAmount: number,
 	timeToAdvance: number,
 	priorityFee: number,
 	bundleBurst: number,
-	correlationId: string,
-	skipIds: string[],
+	lastWorkRequest: WorkRequest,
 	processManager: ProcessManager,
 	keeper: string,
 	flashbots: Flashbots,
 	localProvider: providers.JsonRpcProvider
 ): Observable<boolean> {
 	return from(localProvider.getBlockNumber()).pipe(
-		tap((forkBlock) => console.log(`Retrying work for ${job.metadata.name} forking block ${forkBlock}`)),
-		concatMap((forkBlock) =>
-			doWork(job, forkBlock, timeToAdvance, priorityFee, aheadAmount, bundleBurst, processManager, keeper, skipIds, correlationId)
+		concatMap((currentBlockNumber) => {
+			const lastTargetBlockInBurst = Math.max(...lastWorkRequest.burst.map((item) => item.targetBlock));
+			const aheadAmount = lastTargetBlockInBurst - currentBlockNumber + 1;
+			console.log('Retrying work', {
+				job: job.metadata.name,
+				forkBlock: currentBlockNumber,
+				targetBlock: currentBlockNumber + aheadAmount,
+			});
+			return doWork(
+				job,
+				currentBlockNumber,
+				timeToAdvance,
+				priorityFee,
+				aheadAmount,
+				bundleBurst,
+				processManager,
+				keeper,
+				[],
+				lastWorkRequest.correlationId
+			);
+		}),
+		mergeMap((workRequest) =>
+			sendTxs(workRequest, flashbots).then((result) => ({
+				workRequest,
+				result,
+			}))
 		),
-		mergeMap((workRequests) => sendTxs(workRequests, flashbots)),
 		mergeMap(
-			(result: boolean): Observable<boolean> =>
+			({ result, workRequest }): Observable<boolean> =>
 				result
 					? of(result)
 					: retryWorkAndSendTx(
 							job,
-							aheadAmount,
 							timeToAdvance,
 							priorityFee,
 							bundleBurst,
-							correlationId,
-							skipIds,
+							workRequest,
 							processManager,
 							keeper,
 							flashbots,
 							localProvider
 					  )
-		)
+		),
+		share()
 	);
 }
 
